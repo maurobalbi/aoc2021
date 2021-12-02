@@ -21,11 +21,10 @@ f xs = x * y
   where
     (x, y) = evalState (foldM move (0, 0) xs) 0
 
-
 -- Making it a bit more complicated than necessary to get the hang of MonadState. Alternative solution of 2a with (,,)
 move :: (Num a, MonadState a m) =>  (a, a) -> (Direction, a) -> m (a, a)
 move (x, y) (Up, i) = do
-  modify (\x -> x - i)
+  modify (subtract i)
   pure (x, y)
 move (x, y) (Down, i) = do
   modify (+ i)
