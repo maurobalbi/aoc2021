@@ -9,6 +9,7 @@ import Data.Char
 import Data.List
 import Data.List.Split hiding (endBy, oneOf, sepBy)
 import Data.Maybe
+import qualified Data.Set as S
 import Text.Parsec hiding (State, count, parse, uncons)
 import qualified Text.Parsec as Parsec
 import Prelude hiding (interact)
