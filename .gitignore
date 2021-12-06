@@ -29,3 +29,4 @@ cabal.project.local~
 doc/
 AOC.txt
 .expected_output
+*.test
