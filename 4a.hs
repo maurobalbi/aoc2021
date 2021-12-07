@@ -1,7 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 import AOC
-import Debug.Trace
 
 main :: IO ()
 main = interactg f

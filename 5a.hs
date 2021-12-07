@@ -1,7 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 import AOC
-import Debug.Trace
 import Data.Map hiding (foldl', filter, foldr)
 
 main :: IO ()

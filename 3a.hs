@@ -1,7 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 import AOC
-import Data.ByteString.Builder (integerDec)
 
 main :: IO ()
 main = interact $ f . map (map (== '1'))

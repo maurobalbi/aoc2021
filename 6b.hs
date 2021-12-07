@@ -2,8 +2,6 @@
 
 import AOC hiding (concatMap)
 import Data.MultiSet (MultiSet, concatMap, fromList, size)
-import Debug.Trace
-import qualified Prelude as P
 
 main :: IO ()
 main = interact' $ f . map (read :: String -> Int) . splitOn ","

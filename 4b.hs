@@ -2,8 +2,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 
 import AOC
-import Debug.Trace
-import qualified Data.Set as S
 
 main :: IO ()
 main = interactg f

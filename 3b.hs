@@ -1,9 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 import AOC
-import Debug.Trace
-import Data.ByteString.Builder (integerDec)
-import GHC.Hs.Decls (HsGroup(hs_derivds))
 
 main :: IO ()
 main = interact $ f . map (map (== '1'))
