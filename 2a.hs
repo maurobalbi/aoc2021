@@ -23,3 +23,6 @@ move :: Num a => (Direction, a) -> (a, a) -> (a, a)
 move (Up, i) (x, y) = (x - i, y)
 move (Down, i) (x, y) = (x + i, y)
 move (Forward, i) (x, y) = (x, y + i)
+
+
+-- Type Level solution
