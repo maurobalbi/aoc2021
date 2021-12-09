@@ -2,7 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module AOC (module Prelude, module AOC, module Control.Monad.State, module Text.Parsec, module Data.List, module Data.List.Split, module Data.Maybe) where
+module AOC (module Prelude, module AOC, module Control.Monad.State, module Data.Vector, module Text.Parsec, module Data.List, module Data.List.Split, module Data.Maybe) where
 
 import Control.Monad.State
 import Data.Char
@@ -11,6 +11,8 @@ import Data.List.Split hiding (endBy, oneOf, sepBy)
 import Data.Maybe
 import qualified Data.Map as M
 import qualified Data.Set as S
+import Data.Vector (Vector, (!), (!?))
+import qualified Data.Vector as V
 import Text.Parsec hiding (State, count, parse, uncons, Line)
 import qualified Text.Parsec as Parsec
 import Prelude hiding (interact)
@@ -78,3 +80,38 @@ instance Num a => Num (Maybe a) where
   signum      = (signum <$>)
   fromInteger = (Just . fromInteger)
   negate      = (negate <$>)
+
+(!|) :: Vector a -> Int -> a
+v !| i = v V.! (i `mod` V.length v)
+
+-- | The 'ltov' function is a convenience function for 'Vector.fromList'.
+ltov :: [a] -> Vector a
+ltov = V.fromList
+
+-- | The 'ltov2' function converts a list of lists into a 'Vector' of 'Vector's.
+ltov2 :: [[a]] -> Vector (Vector a)
+ltov2 = ltov . map ltov
+
+-- | The 'ltov3' function converts a list of lists of lists into a 'Vector' of 'Vector's of 'Vector's.
+ltov3 :: [[[a]]] -> Vector (Vector (Vector a))
+ltov3 = ltov . map ltov2
+
+-- | The 'ltov4' function converts a list of lists of lists of lists into a 'Vector' of 'Vector's of 'Vector's of 'Vector's.
+ltov4 :: [[[[a]]]] -> Vector (Vector (Vector (Vector a)))
+ltov4 = ltov . map ltov3
+
+-- | The 'vtol' function is a convenience function for 'Vector.toList'.
+vtol :: Vector a -> [a]
+vtol = V.toList
+
+-- | The 'vtol2' function converts a 'Vector' of 'Vector's into a list of lists.
+vtol2 :: Vector (Vector a) -> [[a]]
+vtol2 = map vtol . vtol
+
+-- | The 'vtol2' function converts a 'Vector' of 'Vector's of 'Vector's into a list of lists of lists.
+vtol3 :: Vector (Vector (Vector a)) -> [[[a]]]
+vtol3 = map vtol2 . vtol
+
+-- | The 'vtol2' function converts a 'Vector' of 'Vector's of 'Vector's of 'Vector's into a list of lists of lists of lists.
+vtol4 :: Vector (Vector (Vector (Vector a))) -> [[[[a]]]]
+vtol4 = map vtol3 . vtol
