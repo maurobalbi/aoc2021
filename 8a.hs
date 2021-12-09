@@ -1,7 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude, TypeFamilies, DataKinds #-}
 
 import AOC
-import GHC.Hs.Expr (HsSplice(XSplice), ApplicativeArg (XApplicativeArg))
 
 main :: IO ()
 main = interact $ f . parseInput
