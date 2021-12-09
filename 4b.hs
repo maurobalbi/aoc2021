@@ -1,5 +1,5 @@
-{-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 import AOC
 
@@ -8,9 +8,8 @@ main = interactg f
 
 data WinningBoard = WinningBoard [String] [[String]] deriving (Show)
 
-instance Eq WinningBoard
-  where
-    (==) (WinningBoard _ a) (WinningBoard _ b) = a == b
+instance Eq WinningBoard where
+  (==) (WinningBoard _ a) (WinningBoard _ b) = a == b
 
 instance Ord WinningBoard where
   (WinningBoard x _) <= (WinningBoard y _) = length x <= length y
@@ -26,9 +25,10 @@ f xss = resultFromBoard $ maximum $ getWinningCombination <$> t
 
     draws = scanl (flip (:)) [] h
 
-    getWinningCombination b = fromMaybe 
-      (error "Never wins") 
-      $ execState (forM draws (winningCombination b)) Nothing
+    getWinningCombination b =
+      fromMaybe
+        (error "Never wins")
+        $ execState (forM draws (winningCombination b)) Nothing
 
     winningCombination :: MonadState (Maybe WinningBoard) m => [[String]] -> [String] -> m ()
     winningCombination xss ns = do

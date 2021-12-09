@@ -10,10 +10,7 @@ f = length . (!! 80) . iterate progressDay
 
 progressDay :: [Int] -> [Int]
 progressDay xs = do
-  x <- xs 
+  x <- xs
   if x == 0
-    then
-      [6,8]
-    else 
-      pure $ x - 1
-
+    then [6, 8]
+    else pure $ x - 1

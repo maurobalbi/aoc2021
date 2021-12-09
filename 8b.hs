@@ -1,4 +1,6 @@
-{-# LANGUAGE NoImplicitPrelude, TypeFamilies, DataKinds #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 
 import AOC
 
@@ -15,28 +17,29 @@ parseNumbers :: String -> [String]
 parseNumbers xs = words $ head $ splitOn "|" xs
 
 f :: [String] -> Int
-f = sum . map (read .f')
+f = sum . map (read . f')
 
 f' :: String -> String
 f' xs = character h <$> t
-  where h = parseNumbers xs
-        t = parseDigits xs
+  where
+    h = parseNumbers xs
+    t = parseDigits xs
 
-character :: [String] -> String-> Char
+character :: [String] -> String -> Char
 character xss i
   | length i == 2 = '1'
   | length i == 3 = '7'
   | length i == 4 = '4'
   | length i == 7 = '8'
-  | null (getSegments [1,2,3,5,6,7] segment \\ i) && length i == 6 = '0'
-  | null (getSegments [1,3,4,5,7] segment \\ i) && length i == 5 = '2'
-  | null (getSegments [1,3,4,6,7] segment \\ i) && length i == 5= '3'
-  | null (getSegments [1,2,4,6,7] segment \\ i)  && length i == 5 = '5'
-  | null (getSegments [1,2,4,5,6,7] segment \\ i) && length i == 6 = '6'
-  | null (getSegments [1,2,3,4,6,7] segment \\i) && length i == 6 = '9'
+  | null (getSegments [1, 2, 3, 5, 6, 7] segment \\ i) && length i == 6 = '0'
+  | null (getSegments [1, 3, 4, 5, 7] segment \\ i) && length i == 5 = '2'
+  | null (getSegments [1, 3, 4, 6, 7] segment \\ i) && length i == 5 = '3'
+  | null (getSegments [1, 2, 4, 6, 7] segment \\ i) && length i == 5 = '5'
+  | null (getSegments [1, 2, 4, 5, 6, 7] segment \\ i) && length i == 6 = '6'
+  | null (getSegments [1, 2, 3, 4, 6, 7] segment \\ i) && length i == 6 = '9'
   | otherwise = error "No letter found"
-      where
-        segment = findPermutation xss
+  where
+    segment = findPermutation xss
 
 getSegments :: [Int] -> String -> String
 getSegments i xs = foldr (\x acc -> xs !! (x - 1) : acc) "" i
@@ -70,10 +73,9 @@ findPermutation xss = do
   guard $ constraint 3 seven 5
 
   [one, two, three, four, five, six, seven]
-    where
-      constraint i c n = i == length (filter (\x -> c `elem` x) (filterLength n))
-      filterLength n = filter ((n ==) . length) xss
-
+  where
+    constraint i c n = i == length (filter (\x -> c `elem` x) (filterLength n))
+    filterLength n = filter ((n ==) . length) xss
 
 -- # \ seg: 1 2 3 4 5 6 7   length
 -- 0        1 1 1 0 1 1 1   6
@@ -90,7 +92,7 @@ findPermutation xss = do
 -- segment 1 in all with length 6 in all with length 5                      in all with length 3
 -- segment 2 in all with length 6 in   1 with length 5 in all with length 4
 -- segment 3 in   2 with length 6 in   2 with length 5 in all with length 4 in all with length 3 in all with length 2
--- segment 4 in   2 with length 6 in all with length 5 in all with length 4 
--- segment 5 in   2 with length 6 in   1 with length 5 
+-- segment 4 in   2 with length 6 in all with length 5 in all with length 4
+-- segment 5 in   2 with length 6 in   1 with length 5
 -- segment 6 in all with length 6 in   2 with length 5 in all with length 4 in all with length 3 in all with length 2
 -- segment 7 in all with length 6 in all with length 5

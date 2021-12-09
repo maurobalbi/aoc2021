@@ -14,7 +14,7 @@ f xss = read (fst goH) * sum (map read (snd goH))
     goH = head go
 
     go = do
-      i <- scanl (flip (:)) []  h
+      i <- scanl (flip (:)) [] h
       ts <- filter (hasBingo i) t
       pure (head i, join ts \\ i)
 

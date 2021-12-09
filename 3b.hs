@@ -5,15 +5,14 @@ import AOC
 main :: IO ()
 main = interact $ f . map (map (== '1'))
 
-f xss = fromMaybe 0 $ readBin co2 * readBin o2 
+f xss = fromMaybe 0 $ readBin co2 * readBin o2
   where
     co2 = go (>=) [] xss
     o2 = go (<) [] xss
-    
+
     go c h [xs] = h ++ xs
     go c h xss = go c (h ++ [r]) xss'
-      where 
+      where
         r = count True hs `c` count False hs
         hs = map head xss
-        xss' = map tail $ filter ((== r) . head ) xss
-
+        xss' = map tail $ filter ((== r) . head) xss
