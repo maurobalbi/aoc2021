@@ -9,10 +9,14 @@ import Debug.Trace
 main :: IO ()
 main = interact $ run . map (read @Int)
 
-eval xs = evalState (step xs) 0
+run :: [Int] -> ([Int], Int)
+run xs = runState (stepM 9 xs) 0
 
-run :: [Int] -> Int
-run xs = execState (step xs) 0
+stepM :: MonadState Int m => Int -> [Int] -> m [Int]
+stepM 1 xs = step xs
+stepM i xs = do
+  u <- step xs
+  stepM (i - 1) u
 
 step :: MonadState Int m => [Int] -> m [Int]
 step = f . map (\x -> if x == 9 then 9 else x + 1)
