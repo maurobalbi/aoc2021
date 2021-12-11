@@ -3,7 +3,7 @@
 import AOC
 
 main :: IO ()
-main = interact $ f . window . map (read :: String -> Int) 
+main = interact $ f . window . map (read :: String -> Int)
 
 f :: [Int] -> Int
 f xs = count True $ zipWith (<) xs (tail xs)
