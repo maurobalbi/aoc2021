@@ -2,8 +2,6 @@
 
 import AOC
 import qualified Data.Map as M
-import Data.Functor.Identity
-import Text.Parsec.Error (errorMessages, messageString)
 
 main :: IO ()
 main = interact  f
@@ -11,7 +9,8 @@ main = interact  f
 f :: [String] -> Int
 f xs = (\x -> x !! (length x `div` 2)) $ sort $ calculatePoints <$> brackets
   where
-    brackets = mapMaybe (either (const Nothing) Just . runParser p "" "") xs
+    brackets = mapMaybe (either (const Nothing) Just . parse) xs
+    parse = runParser p "" ""
  
 calculatePoints :: String -> Int
 calculatePoints = foldl' (\acc x -> addPoints x (acc * 5)) 0
