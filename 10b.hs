@@ -28,7 +28,9 @@ p =  many1 (parseBrackets ('(',')')
   <|> parseBrackets ('{','}')) >> getState
 
 parseBrackets :: (Char, Char) -> Parsec String [Char] ()
-parseBrackets b@(o, c) = parseOpeningBracket b >> many p >> (parseClosingBracket c <|> eof) 
+parseBrackets b@(o, c) = parseOpeningBracket b 
+  >> many p 
+  >> (parseClosingBracket c <|> eof) 
 
 parseOpeningBracket :: (Char, Char) -> Parsec String [Char]  ()
 parseOpeningBracket (o,c) = do
@@ -44,4 +46,6 @@ parseClosingBracket c= do
 
 removeFirst :: Char -> String -> String
 removeFirst _ [] = []
-removeFirst c1 (c2:cs) = if c1 == c2 then cs else c2:removeFirst c1 cs
+removeFirst c1 (c2:cs) = if c1 == c2 
+  then cs 
+  else c2:removeFirst c1 cs
