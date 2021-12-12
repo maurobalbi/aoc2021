@@ -20,7 +20,8 @@ inc :: Octopus -> Octopus
 inc (Energy n) = Energy $ n + 1
 inc Exhausted   = Exhausted
 
-run xs = sum . evalState (replicateM 100 step) $ tupleMap xs
+run :: [[Int]] -> Int
+run xs = (+1) . fromJust . elemIndex 100 . evalState (replicateM 400 step) $ tupleMap xs
 
 unflash :: Octopus -> Octopus
 unflash (Energy n) = Energy n
