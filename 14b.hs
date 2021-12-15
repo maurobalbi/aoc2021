@@ -31,9 +31,9 @@ linkChain m = S.concatMap (insertElements m)
 
 run x = last (occurences fold) - head (occurences fold)
   where
-    fold = S.foldOccur (\ (a,b) i acc -> S.insertMany a i $ S.insertMany b i acc) S.empty iteration
+    fold = S.foldOccur (\ (a,b) i acc -> S.insertMany a i $ S.insertMany b i $ acc) S.empty iteration
     occurences x = sort $ (`div` 2 ) . (+1) .snd <$> S.toOccurList x
-    iteration = (!! 10) $ iterate (linkChain polymers) pairs
+    iteration = (!! 40) $ iterate (linkChain polymers) pairs
     pairs = S.fromList $ zip chain $ drop 1 chain
     chain = (!! 0 ) $ parseList (many1 upper) $ head x
     polymers = M.fromList $ parseList p $ (!! 1) x
