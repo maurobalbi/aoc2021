@@ -29,9 +29,10 @@ insertElements m (a,b) = [(a,c), (c,b)]
 linkChain :: M.Map String Char -> S.MultiSet (Char,Char) -> S.MultiSet (Char,Char)
 linkChain m = S.concatMap (insertElements m)
 
+run :: [[String]] -> S.Occur
 run x = last (occurences fold) - head (occurences fold)
   where
-    fold = S.foldOccur (\ (a,b) i acc -> S.insertMany a i $ S.insertMany b i $ acc) S.empty iteration
+    fold = S.foldOccur (\ (a,b) i acc -> S.insertMany a i $ S.insertMany b i acc) S.empty iteration
     occurences x = sort $ (`div` 2 ) . (+1) .snd <$> S.toOccurList x
     iteration = (!! 40) $ iterate (linkChain polymers) pairs
     pairs = S.fromList $ zip chain $ drop 1 chain
