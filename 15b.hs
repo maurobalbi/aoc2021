@@ -7,13 +7,10 @@
 
 import AOC
 
-import Debug.Trace
 import qualified Data.Map as M
 import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.PatriciaTree (Gr)
 import Data.Graph.Inductive.Query.SP
-import Text.Parsec.Char (upper)
-import Text.ParserCombinators.Parsec.Token (GenTokenParser(squares))
 
 main :: IO ()
 main = interact $ run  . map (map (read @Int . (: "")) :: String -> [Int])
