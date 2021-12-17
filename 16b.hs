@@ -124,7 +124,7 @@ interpretPacket (Operator _ GreaterThan [p1, p2]) = if interpretPacket p1 > inte
 interpretPacket (Operator _ Equal [p1, p2]) = if interpretPacket p1 == interpretPacket p2 then 1 else 0
 interpretPacket x = error $ "Something unexpected happened" ++ show x
 
-run x = foldl' (+) 0 $ either (error "Could not parse") id $ do
+run x = interpretPacket $ either (error "Could not parse") id $ do
   input <- parseH
   runParser parsePacket 0 "" input
     where
