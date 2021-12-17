@@ -30,11 +30,11 @@ main = P.interact (\x -> show (run x) ++ "\n")
 
 parseHex :: Parsec String () String
 parseHex =  do
-  x <- many1 hexToString
+  x <- many1 hexToBitString
   pure $ join x
 
-hexToString :: Parsec String () String
-hexToString = do
+hexToBitString :: Parsec String () String
+hexToBitString = do
   c <- hexDigit
   pure $ case toUpper c of
     '0' -> "0000"
