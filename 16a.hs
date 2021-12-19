@@ -26,7 +26,7 @@ data Packet a = Literal {version:: a, value::Int}
 type Parser a = Parsec String Int a
 
 main :: IO ()
-main = P.interact (\x -> show (run x) ++ "\n")
+main = interact' run 
 
 parseHex :: Parsec String () String
 parseHex =  do

@@ -1,35 +1,43 @@
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE DeriveFoldable #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE TupleSections #-}
-{-# LANGUAGE DeriveFoldable #-}
 
-import AOC hiding (count, Parser, parse)
-
-import Debug.Trace
-import Numeric
+import AOC hiding (Parser, count, parse)
+import Data.Char
 import Data.Either
 import Data.Functor
 import Data.Functor.Identity
-import qualified Prelude as P
-import Data.Char
+import Debug.Trace
+import Numeric
 import Text.Parsec (count, parse)
+import qualified Prelude as P
 
-data OperatorType = Sum | Product | Minimum | Maximum | GreaterThan |  LessThan | Equal deriving Show
+data OperatorType
+  = Sum
+  | Product
+  | Minimum
+  | Maximum
+  | GreaterThan
+  | LessThan
+  | Equal
+  deriving (Show)
 
-data Packet a = Literal {version:: a, value::Int}
-  | Operator {version::a, oType::OperatorType, packets::[Packet a]}
+data Packet a
+  = Literal {version :: a, value :: Int}
+  | Operator {version :: a, oType :: OperatorType, packets :: [Packet a]}
   deriving (Show, Foldable)
 
 type Parser a = Parsec String Int a
 
 main :: IO ()
-main = P.interact (\x -> show (run x) ++ "\n")
+main = interact' run
 
 parseHex :: Parsec String () String
-parseHex =  do
+parseHex = do
   x <- many1 hexToBitString
   pure $ join x
 
@@ -67,24 +75,23 @@ parseOperator = do
   packets <- case x of
     '0' -> parseByLengthPacket
     '1' -> parseByNumberPacket
-    _   -> error "Unexpected"
+    _ -> error $ "Not a binary number!" ++ show x
   pure $ Operator version oType packets
 
 parseOperatorType :: Parser OperatorType
 parseOperatorType = do
   n <- readBin' <$> count 3 digit
   pure $ oType n
-    where
-      oType n = case n of
-        0 -> Sum
-        1 -> Product
-        2 -> Minimum
-        3 -> Maximum
-        5 -> GreaterThan
-        6 -> LessThan
-        7 -> Equal
-        _ -> error "Unknown operator"
-
+  where
+    oType n = case n of
+      0 -> Sum
+      1 -> Product
+      2 -> Minimum
+      3 -> Maximum
+      5 -> GreaterThan
+      6 -> LessThan
+      7 -> Equal
+      _ -> error $ "Unknown operator" ++ show n
 
 parseByLengthPacket :: Parser [Packet Int]
 parseByLengthPacket = do
@@ -124,8 +131,9 @@ interpretPacket (Operator _ GreaterThan [p1, p2]) = if interpretPacket p1 > inte
 interpretPacket (Operator _ Equal [p1, p2]) = if interpretPacket p1 == interpretPacket p2 then 1 else 0
 interpretPacket x = error $ "Something unexpected happened" ++ show x
 
-run x = interpretPacket $ either (error "Could not parse") id $ do
-  input <- parseH
-  runParser parsePacket 0 "" input
-    where
-      parseH = parse parseHex "" x
+run x = interpretPacket $
+  either (error "Could not parse") id $ do
+    input <- parseH
+    runParser parsePacket 0 "" input
+  where
+    parseH = parse parseHex "" x
