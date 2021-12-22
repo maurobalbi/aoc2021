@@ -115,3 +115,11 @@ vtol3 = map vtol2 . vtol
 -- | The 'vtol2' function converts a 'Vector' of 'Vector's of 'Vector's of 'Vector's into a list of lists of lists of lists.
 vtol4 :: Vector (Vector (Vector (Vector a))) -> [[[[a]]]]
 vtol4 = map vtol3 . vtol
+
+instance (Num a, Num b, Num c) => Num (a, b, c) where
+  (x, y, z) + (u, v, w) = (x + u, y + v, z + w)
+  (x, y, z) * (u, v, w) = (x * u, y * v, z * w)
+  negate (x, y, z) = (negate x, negate y, negate z)
+  fromInteger x = (fromInteger x, 0, 0)
+  abs (x, y, z) = (abs x, abs y, abs z)
+  signum (x, y, z) = (signum x, signum y, signum z)

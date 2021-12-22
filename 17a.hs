@@ -11,13 +11,7 @@ import Debug.Trace
 import Data.Either
 import qualified Prelude as P
 
--- x > 0 && x < (max targetAreaX)
--- y > (min targetAreaY) && (y - x * (x+1) /2) < max targetArea
-
--- max amount steps = max targetAreaX
-
 main :: IO ()
-
 main = interact' $ run . fromRight (error "Parse error") . parse p
 
 p :: Parser ((Int,Int), (Int,Int))
@@ -50,7 +44,6 @@ hits m@((xMin,xMax), (yMin,yMax)) = do
   (vx, vy) <- [(vx,vy) | vx <- [0..xMax], vy <- [yMin.. (vx * (vx +1) `div` 2)]]
   let steps = takeWhile (\((x,y), _) -> x <= xMax && y >= yMin - abs vy) $ iterate step ((0,0), (vx, vy))
   guard $ any (isInTarget m) steps
-  -- guard $ isInTarget m ((x,y), (vx', vy'))
   snd . fst <$> steps
 
 run x = maximum $ hits x
