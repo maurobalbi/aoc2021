@@ -5,14 +5,10 @@
 {-# LANGUAGE TupleSections #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE NoImplicitPrelude #-}
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
 import AOC
 import Data.Functor
-import Data.Tuple
-import Debug.Trace
 import Data.Either
-import qualified Data.Set as S
 import qualified Data.Map as M
 
 tupleMap :: [[Bool]] -> M.Map (Int, Int) Bool
