@@ -23,12 +23,11 @@ run x = step (cycle [1..100]) (0,0) x 0
   where step die s@(score1, score2) l@(loc1,loc2) count 
           | score1 >= 1000 =  score2 * count
           | score2 >= 1000 =  score1 * count
-          | count >= 10000 = error (show s ++ show l ++ show throw ++ "   " ++ show (board !! (loc2 + throw -1 )))
+          | count >= 10000 = error "bla"
           | odd count = step (drop 3 die) (score1, score2 + newLoc loc2) (loc1, newLoc loc2) (count + 3)
           | otherwise = step (drop 3 die) (score1 + newLoc loc1, score2) (newLoc loc1, loc2) (count + 3)
             where 
-              newLoc loc = board !! (loc + throw -1)
-              board = cycle [1..10]
+              newLoc loc = (loc + throw) `mod` 10
               throw =  sum $ take 3 die
 
 main :: IO ()

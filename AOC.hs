@@ -47,6 +47,14 @@ stringi = mapM chari
 integer :: Parser Int
 integer = read <$> many1 digit
 
+signedInteger :: Parser Int
+signedInteger = read
+        <$> ( do
+                i <- char '-' <|> digit
+                rest <- many digit
+                pure $ i : rest
+            )
+
 enump :: forall b. (Enum b, Bounded b, Show b) => Parser b
 enump = choice $ map sr [minBound :: b .. maxBound :: b]
   where
