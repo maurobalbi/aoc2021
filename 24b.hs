@@ -62,8 +62,8 @@ writeReg W v = w .= v
 
 evalOp :: Op -> Register -> B -> State RegState ()
 evalOp op reg b = do 
-        v <- readVal b
         a <- readReg reg
+        v <- readVal b
         writeReg reg (op' a v)
   where op' = opFunc op
 
