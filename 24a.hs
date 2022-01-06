@@ -44,22 +44,28 @@ initialState = RegState 0 0 0 0
 toNum :: [Data] -> Data
 toNum = foldl1 (\acc e -> acc * 10 + e)
 
-readVal :: B -> RegState -> Data
-readVal (Number i) _ = fromIntegral i
-readVal (Var reg) state = readReg reg state
+readVal :: B -> State RegState Data
+readVal (Number i) = pure $ fromIntegral i
+readVal (Var reg) = readReg reg
 
-readReg ::Register -> RegState -> Data
-readReg X = _x
-readReg Y = _y
-readReg Z = _z
-readReg W = _w
+readReg :: Register -> State RegState Data
+readReg X = _x <$> get
+readReg Y = _y <$> get
+readReg Z = _z <$> get
+readReg W = _w <$> get
 
-writeReg :: RegState -> Register -> Data -> RegState
-writeReg state X v = state {_x = v}
-writeReg state Y v = state {_y = v}
-writeReg state Z v = state {_z = v}
-writeReg state W v = state {_w = v}
+writeReg :: Register -> Data -> State RegState ()
+writeReg X v = x .= v
+writeReg Y v = y .= v
+writeReg Z v = z .= v
+writeReg W v = w .= v
 
+evalOp :: Op -> Register -> B -> State RegState ()
+evalOp op reg b = do 
+        v <- readVal b
+        a <- readReg reg
+        writeReg reg (op' a v)
+  where op' = opFunc op
 
 opFunc :: Op -> Data -> Data -> Data
 opFunc Add = (+)
@@ -69,14 +75,13 @@ opFunc Mod = sMod
 opFunc Eql = \a b -> ite (a .== b) 1 0
 
 interpret :: [Data] -> [Instruction] -> RegState
-interpret = interpret' initialState
+interpret d i = execState (interpret' d i) initialState
 
-interpret' :: RegState -> [Data] -> [Instruction] -> RegState
-interpret' state [] [] = state
-interpret' state (inp:rest) ((Input reg): ins) = interpret' (writeReg state reg inp) rest ins
-interpret' state inp ((Instruction op a b): inss) = 
-  interpret' (writeReg state a (opFunc op (readReg a state) (readVal b state))) inp inss
-interpret' state _ _ = error "someting went wrong"
+interpret' :: [Data] -> [Instruction] -> State RegState ()
+interpret' [] [] = pure ()
+interpret' (inp:rest) ((Input reg): ins) = writeReg reg inp >> interpret' rest ins
+interpret' inp ((Instruction op a b): inss) = evalOp op a b >> interpret' inp inss
+interpret' _ _ = error "someting went wrong"
 
 
 run :: [Instruction] -> IO OptimizeResult
