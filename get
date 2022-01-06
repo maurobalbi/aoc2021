@@ -7,9 +7,9 @@ if [ -r .cookie ]; then
 fi
 
 export TZ=EST
-thisyear="$(date +%Y)"
-thismonth="$(date +%m)"
-thisday="$(date +%d)"
+thisyear=2021
+thismonth=12
+thisday=31
 
 year=2021
 for day in {1..25}; do
